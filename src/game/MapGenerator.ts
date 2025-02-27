@@ -1,11 +1,11 @@
 // src/game/MapGenerator.ts
 import { GameMap, MapNode, MapEdge } from "../types";
-import { getRandomMonster } from "../data/monsters-expanded";
 
 // Node types and their probabilities at different stages
 const NODE_TYPE_WEIGHTS = {
   EARLY: {
     monster: 0.5,
+    elite: 0,
     rest: 0.3,
     merchant: 0.2,
   },
@@ -34,7 +34,7 @@ export interface MapGenerationOptions {
 
 export class MapGenerator {
   private width: number;
-  private height: number;
+  // private height: number;
   private numLevels: number;
   private nodesPerLevel: number;
   private includeElites: boolean;
@@ -42,7 +42,7 @@ export class MapGenerator {
 
   constructor(options: MapGenerationOptions = {}) {
     this.width = options.width || 800;
-    this.height = options.height || 600;
+    // this.height = options.height || 800;
     this.numLevels = options.numLevels || 4;
     this.nodesPerLevel = options.nodesPerLevel || 3;
     this.includeElites =
@@ -132,6 +132,7 @@ export class MapGenerator {
     difficulty: "EARLY" | "MID" | "LATE",
     prevLevelNodes: MapNode[],
   ): MapNode[] {
+    console.log(prevLevelNodes);
     const nodes: MapNode[] = [];
     const levelY = 50 - level * 120; // Vertical position
 

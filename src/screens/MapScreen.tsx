@@ -143,7 +143,7 @@ const MapScreen: React.FC<UpdatedMapScreenProps> = ({ onNodeSelect }) => {
         g.lineTo(5, -10);
         g.lineTo(0, -5);
         break;
-      case "elite":
+      case "elite": {
         // Elite monster icon
         g.moveTo(0, -5);
         g.lineTo(20, -5);
@@ -171,7 +171,8 @@ const MapScreen: React.FC<UpdatedMapScreenProps> = ({ onNodeSelect }) => {
         }
         g.closePath();
         break;
-      case "boss":
+      }
+      case "boss": {
         // Boss icon - larger star
         const bossNumPoints = 5;
         const bossOuterRadius = 10;
@@ -193,6 +194,7 @@ const MapScreen: React.FC<UpdatedMapScreenProps> = ({ onNodeSelect }) => {
         }
         g.closePath();
         break;
+      }
       case "rest":
         // Rest icon
         g.drawCircle(10, -10, 10);

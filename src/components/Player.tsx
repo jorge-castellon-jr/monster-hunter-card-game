@@ -2,7 +2,7 @@
 import React from "react";
 import { Container, Graphics, Text } from "@pixi/react";
 import * as PIXI from "pixi.js";
-import { PlayerComponentProps, PlayerEffect } from "../types";
+import { PlayerComponentProps } from "../types";
 
 const Player: React.FC<PlayerComponentProps> = ({
   health,

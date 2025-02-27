@@ -1,8 +1,8 @@
 // src/game/ShopSystem.ts
 import { Card, WeaponType } from "../types";
-import { CARDS, STARTING_DECKS } from "../data/cards";
-import playerProgress from "./PlayerProgress";
-import { CARD_UPGRADES, UPGRADED_CARDS } from "../data/upgrades";
+import { CARDS } from "../data/cards";
+import playerProgress, { RunData } from "./PlayerProgress";
+import { CARD_UPGRADES, CardUpgrade } from "../data/upgrades";
 
 export interface ShopItem {
   id: string;
@@ -12,7 +12,7 @@ export interface ShopItem {
   type: "card" | "upgrade" | "consumable" | "maxhp";
   cardId?: string;
   upgradeId?: string;
-  effect?: (currentRun: any) => void;
+  effect?: (currentRun: RunData) => void;
 }
 
 export class ShopSystem {
@@ -88,6 +88,7 @@ export class ShopSystem {
 
   // Generate card upgrades for the shop
   private getCardUpgrades(weaponType: WeaponType, level: number): ShopItem[] {
+    console.log(weaponType);
     const items: ShopItem[] = [];
 
     // Get current run
@@ -157,7 +158,7 @@ export class ShopSystem {
         name: "Potion",
         description: "Restore 20 HP",
         basePrice: 30,
-        effect: (currentRun) => {
+        effect: (currentRun: RunData) => {
           if (currentRun) {
             currentRun.currentHealth = Math.min(
               currentRun.currentHealth + 20,
@@ -171,7 +172,7 @@ export class ShopSystem {
         name: "Mega Potion",
         description: "Restore 50 HP",
         basePrice: 60,
-        effect: (currentRun) => {
+        effect: (currentRun: RunData) => {
           if (currentRun) {
             currentRun.currentHealth = Math.min(
               currentRun.currentHealth + 50,
@@ -185,7 +186,7 @@ export class ShopSystem {
         name: "Max Potion",
         description: "Restore all HP",
         basePrice: 100,
-        effect: (currentRun) => {
+        effect: (currentRun: RunData) => {
           if (currentRun) {
             currentRun.currentHealth = currentRun.maxHealth;
           }
@@ -196,7 +197,7 @@ export class ShopSystem {
         name: "Power Charm",
         description: "Increase damage by 10% for the next 3 combats",
         basePrice: 80,
-        effect: (currentRun) => {
+        effect: (currentRun: RunData) => {
           if (currentRun) {
             // Implement buff effect
           }
@@ -268,7 +269,8 @@ export class ShopSystem {
   }
 
   // Get price for a card upgrade based on the upgrade and level
-  private getUpgradePrice(upgrade: any, level: number): number {
+  private getUpgradePrice(upgrade: CardUpgrade, level: number): number {
+    console.log(upgrade);
     const basePrice = 100;
     const scaledPrice = Math.round(basePrice * (1 + level * 0.15));
 

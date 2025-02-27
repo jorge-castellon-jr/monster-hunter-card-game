@@ -9,17 +9,22 @@ import Monster from "../components/Monster";
 import Player from "../components/Player";
 
 import CombatEngine from "../game/CombatEngine";
-import GameState from "../game/GameState";
+import GameState, { PlayerStats } from "../game/GameState";
 import playerProgress from "../game/PlayerProgress";
 
 import { MONSTERS } from "../data/monsters";
 import { ALL_MONSTERS } from "../data/monsters-expanded";
 import { WEAPON_TYPES } from "../data/cards";
-import { Card as CardType, MonsterPart } from "../types";
+import {
+  Card as CardType,
+  Monster as MonsterType,
+  MonsterPart,
+  WeaponType,
+} from "../types";
 
 interface UpdatedCombatScreenProps {
   onComplete: (result: "victory" | "defeat") => void;
-  selectedWeapon?: string;
+  selectedWeapon?: WeaponType;
   nodeType?: string;
 }
 
@@ -33,9 +38,9 @@ const CombatScreen: React.FC<UpdatedCombatScreenProps> = ({
   const [combatEngine, setCombatEngine] = useState<CombatEngine | null>(null);
   const [isPlayerTurn, setIsPlayerTurn] = useState(true);
   const [selectedCardId, setSelectedCardId] = useState<string | null>(null);
-  const [selectedTarget, setSelectedTarget] = useState<MonsterPart | null>(
-    null,
-  );
+  // const [selectedTarget, setSelectedTarget] = useState<MonsterPart | null>(
+  //   null,
+  // );
   const [gameMessage, setGameMessage] = useState("");
   const [combatLog, setCombatLog] = useState<string[]>([]);
   const [statusEffects, setStatusEffects] = useState<
@@ -57,7 +62,7 @@ const CombatScreen: React.FC<UpdatedCombatScreenProps> = ({
     if (!currentRun) {
       // Fallback to a default if no current run exists
       const weaponType =
-        (selectedWeapon as any) || WEAPON_TYPES.SWORD_AND_SHIELD;
+        (selectedWeapon as WeaponType) || WEAPON_TYPES.SWORD_AND_SHIELD;
       newGameState.startNewGame(weaponType);
     }
 
@@ -65,10 +70,13 @@ const CombatScreen: React.FC<UpdatedCombatScreenProps> = ({
     newCombatEngine.initialize(newGameState);
 
     // Set up event listeners
-    newCombatEngine.addEventListener("combatStarted", (data) => {
-      addToCombatLog(`Combat started against ${data.monster.name}!`);
-      setIsPlayerTurn(true);
-    });
+    newCombatEngine.addEventListener(
+      "combatStarted",
+      (data: { player: PlayerStats; monster: MonsterType }) => {
+        addToCombatLog(`Combat started against ${data.monster.name}!`);
+        setIsPlayerTurn(true);
+      },
+    );
 
     newCombatEngine.addEventListener("turnEnded", (data) => {
       addToCombatLog(
@@ -80,7 +88,7 @@ const CombatScreen: React.FC<UpdatedCombatScreenProps> = ({
     newCombatEngine.addEventListener("cardPlayed", (data) => {
       addToCombatLog(`Played card: ${data.card.name}`);
       setSelectedCardId(null);
-      setSelectedTarget(null);
+      // setSelectedTarget(null);
     });
 
     newCombatEngine.addEventListener("playerMoved", (data) => {
@@ -169,7 +177,7 @@ const CombatScreen: React.FC<UpdatedCombatScreenProps> = ({
 
       // Select monster based on node type and level
       switch (nodeType) {
-        case "monster":
+        case "monster": {
           // Get random monster based on level
           const difficulty = level <= 1 ? "EARLY" : level >= 3 ? "LATE" : "MID";
           const candidates =
@@ -189,6 +197,7 @@ const CombatScreen: React.FC<UpdatedCombatScreenProps> = ({
 
           monster = candidates[Math.floor(Math.random() * candidates.length)];
           break;
+        }
 
         case "elite":
           // Elite monsters
@@ -291,7 +300,7 @@ const CombatScreen: React.FC<UpdatedCombatScreenProps> = ({
       const card = gameState.playerHand.find((c) => c.id === cardId);
 
       if (card && (card.targetType === "single" || card.targetType === "all")) {
-        setSelectedTarget(part);
+        // setSelectedTarget(part);
 
         // Find the position of the part
         const position = gameState.currentMonster.parts.findIndex(

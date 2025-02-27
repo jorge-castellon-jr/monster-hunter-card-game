@@ -1,5 +1,7 @@
 // src/game/StatusEffects.ts
 
+import { MonsterPart } from "../types";
+
 export type StatusEffectType =
   | "poison"
   | "bleeding"
@@ -17,9 +19,10 @@ export interface StatusEffect {
   description: string;
   duration: number;
   value?: number; // For damage/buff effects
-  apply: (target: any) => void;
+  apply: (target: MonsterPart) => void;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   onTurnStart?: (target: any) => void;
-  onTurnEnd?: (target: any) => void;
+  onTurnEnd?: (target: MonsterPart) => void;
 }
 
 // Factory functions to create status effects
@@ -35,13 +38,14 @@ export const createPoisonEffect = (
   value: damagePerTurn,
   apply: (target) => {
     // Apply visual indicator
+    console.log(target);
   },
-  onTurnEnd: (target) => {
-    // Apply poison damage
-    if (target.damagePlayer) {
-      target.damagePlayer(damagePerTurn);
-    }
-  },
+  // onTurnEnd: (target) => {
+  //   // Apply poison damage
+  //   if (target.damagePlayer) {
+  //     target.damagePlayer(damagePerTurn);
+  //   }
+  // },
 });
 
 export const createBleedingEffect = (
@@ -56,6 +60,7 @@ export const createBleedingEffect = (
   value: damagePerTurn,
   apply: (target) => {
     // Apply visual indicator
+    console.log(target);
   },
   // Movement penalty handled in combat engine
 });
@@ -72,13 +77,14 @@ export const createBurningEffect = (
   value: damagePerTurn,
   apply: (target) => {
     // Apply visual indicator
+    console.log(target);
   },
-  onTurnEnd: (target) => {
-    // Apply burn damage
-    if (target.damagePlayer) {
-      target.damagePlayer(damagePerTurn);
-    }
-  },
+  // onTurnEnd: (target) => {
+  //   // Apply burn damage
+  //   if (target.damagePlayer) {
+  //     target.damagePlayer(damagePerTurn);
+  //   }
+  // },
 });
 
 export const createStunEffect = (duration: number = 1): StatusEffect => ({
@@ -89,6 +95,7 @@ export const createStunEffect = (duration: number = 1): StatusEffect => ({
   duration,
   apply: (target) => {
     // Apply visual indicator
+    console.log(target);
   },
   // Effect handled in monster AI
 });
@@ -105,6 +112,7 @@ export const createBuffEffect = (
   value,
   apply: (target) => {
     // Apply visual indicator
+    console.log(target);
   },
   // Damage bonus applied in combat engine
 });
@@ -121,6 +129,7 @@ export const createWeaknessEffect = (
   value,
   apply: (target) => {
     // Apply visual indicator
+    console.log(target);
   },
   // Extra damage applied in combat engine
 });
@@ -133,13 +142,14 @@ export const createSharpnessEffect = (duration: number = 3): StatusEffect => ({
   duration,
   apply: (target) => {
     // Apply visual indicator
+    console.log(target);
   },
   // Break chance bonus applied in combat engine
 });
 
 // Check if a target has a specific status effect
 export const hasStatusEffect = (
-  target: any,
+  target: MonsterPart,
   type: StatusEffectType,
 ): boolean => {
   if (!target || !target.statusEffects) return false;
@@ -151,7 +161,7 @@ export const hasStatusEffect = (
 
 // Get a status effect from a target
 export const getStatusEffect = (
-  target: any,
+  target: MonsterPart,
   type: StatusEffectType,
 ): StatusEffect | null => {
   if (!target || !target.statusEffects) return null;
@@ -163,7 +173,10 @@ export const getStatusEffect = (
 };
 
 // Apply a status effect to a target
-export const applyStatusEffect = (target: any, effect: StatusEffect): void => {
+export const applyStatusEffect = (
+  target: MonsterPart,
+  effect: StatusEffect,
+): void => {
   if (!target) return;
 
   // Initialize statusEffects array if it doesn't exist
@@ -189,7 +202,7 @@ export const applyStatusEffect = (target: any, effect: StatusEffect): void => {
 };
 
 // Handle turn start effects
-export const handleTurnStartEffects = (target: any): void => {
+export const handleTurnStartEffects = (target: MonsterPart): void => {
   if (!target || !target.statusEffects) return;
 
   target.statusEffects.forEach((effect: StatusEffect) => {
@@ -200,7 +213,7 @@ export const handleTurnStartEffects = (target: any): void => {
 };
 
 // Handle turn end effects
-export const handleTurnEndEffects = (target: any): void => {
+export const handleTurnEndEffects = (target: MonsterPart): void => {
   if (!target || !target.statusEffects) return;
 
   // Apply end of turn effects

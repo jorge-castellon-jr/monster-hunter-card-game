@@ -210,7 +210,7 @@ export const CARDS: Record<string, Card> = {
 };
 
 // Starting Decks
-export const STARTING_DECKS: Record<WeaponType, Card[]> = {
+export const STARTING_DECKS: Record<string, Card[]> = {
   [WEAPON_TYPES.SWORD_AND_SHIELD]: [
     CARDS.QUICK_SLASH,
     CARDS.QUICK_SLASH,

@@ -10,7 +10,8 @@ import {
   StatusEffect,
 } from "./StatusEffects";
 
-type EventCallback = (data: unknown) => void;
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+type EventCallback = (data: any) => void;
 
 class CombatEngine {
   gameState: GameState | null;
@@ -84,33 +85,33 @@ class CombatEngine {
       this.gameState.playerStatusEffects.length > 0
     ) {
       // Process each effect's start of turn action
-      this.gameState.playerStatusEffects.forEach((effect) => {
-        if (effect.onTurnStart) {
-          effect.onTurnStart(this.gameState);
-          this.triggerEvent("statusEffectActivated", {
-            effectType: effect.type,
-            effectName: effect.name,
-            target: "player",
-          });
-        }
-      });
+      // this.gameState.playerStatusEffects.forEach((effect) => {
+      //   if (effect.onTurnStart) {
+      //     effect.onTurnStart(this.gameState);
+      //     this.triggerEvent("statusEffectActivated", {
+      //       effectType: effect.type,
+      //       effectName: effect.name,
+      //       target: "player",
+      //     });
+      //   }
+      // });
     }
 
     // Monster part status effects
     if (this.gameState.currentMonster && this.gameState.currentMonster.parts) {
       this.gameState.currentMonster.parts.forEach((part) => {
         if (part.statusEffects && part.statusEffects.length > 0) {
-          part.statusEffects.forEach((effect) => {
-            if (effect.onTurnStart) {
-              effect.onTurnStart(part);
-              this.triggerEvent("statusEffectActivated", {
-                effectType: effect.type,
-                effectName: effect.name,
-                target: "monster",
-                partId: part.id,
-              });
-            }
-          });
+          // part.statusEffects.forEach((effect) => {
+          //   if (effect.onTurnStart) {
+          //     effect.onTurnStart(part);
+          //     this.triggerEvent("statusEffectActivated", {
+          //       effectType: effect.type,
+          //       effectName: effect.name,
+          //       target: "monster",
+          //       partId: part.id,
+          //     });
+          //   }
+          // });
         }
       });
     }
@@ -518,6 +519,7 @@ class CombatEngine {
   }
 
   applyMovementCard(card: Card, targetPosition?: number): void {
+    console.log(card);
     if (!this.gameState || targetPosition === undefined) return;
 
     // Move player to target position
@@ -580,16 +582,16 @@ class CombatEngine {
         this.gameState.playerStatusEffects.length > 0
       ) {
         // Process each effect's end of turn action
-        this.gameState.playerStatusEffects.forEach((effect) => {
-          if (effect.onTurnEnd) {
-            effect.onTurnEnd(this.gameState);
-            this.triggerEvent("statusEffectActivated", {
-              effectType: effect.type,
-              effectName: effect.name,
-              target: "player",
-            });
-          }
-        });
+        // this.gameState.playerStatusEffects.forEach((effect) => {
+        //   if (effect.onTurnEnd) {
+        //     effect.onTurnEnd(this.gameState);
+        //     this.triggerEvent("statusEffectActivated", {
+        //       effectType: effect.type,
+        //       effectName: effect.name,
+        //       target: "player",
+        //     });
+        //   }
+        // });
 
         // Reduce durations and remove expired effects
         this.gameState.playerStatusEffects = this.gameState.playerStatusEffects

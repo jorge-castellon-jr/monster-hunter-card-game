@@ -1,5 +1,5 @@
 // src/data/monsters-expanded.ts
-import { Monster, MonsterAttack, MonsterPart } from "../types";
+import { Monster, MonsterAttack } from "../types";
 import {
   MONSTER_TYPES,
   MONSTER_ATTACK_TYPES,
