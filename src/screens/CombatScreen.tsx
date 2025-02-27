@@ -495,7 +495,7 @@ const CombatScreen: React.FC<UpdatedCombatScreenProps> = ({
 
         {/* Game Message */}
         {gameMessage && (
-          <Container x={width / 2 - 150} y={height - 50}>
+          <Container x={width / 2 - 150} y={height / 2 - 50}>
             <Graphics
               draw={(g) => {
                 g.clear();
